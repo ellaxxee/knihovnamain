@@ -1,0 +1,52 @@
+{block content}
+
+<h1>Knihy</h1>
+
+<div class="books-grid">
+	{foreach $books as $b}
+		<div class="book-tile">
+
+			<a n:href="detail id => $b->id">
+				<div class="book-cover">
+					{if $b->cover}
+						<img src="{$basePath}/{$b->cover}" alt="{$b->title}">
+					{/if}
+				</div>
+			</a>
+
+			<div class="book-name">
+				<a n:href="detail id => $b->id">{$b->title}</a>
+			</div>
+
+			<div class="book-author">{$b->author}</div>
+
+			<div style="font-size:12px;color:var(--muted); margin: 6px 0 10px; line-height:1.4;">
+				ISBN: {$b->isbn}<br>
+				Rok: {$b->publication_year} • Žánr: {$b->genre}<br>
+				<strong>Volné:</strong> {$available[$b->id]} / {$b->total_copies}
+			</div>
+
+			<div class="book-cta">
+				<a class="btn btn-soft" n:href="detail id => $b->id">Detail</a>
+
+				{if $user->isLoggedIn() && !$user->isInRole('admin')}
+					{if $available[$b->id] > 0}
+						<a class="btn btn-accent" n:href="borrow! id => $b->id">Vypůjčit</a>
+					{else}
+						<span class="btn" style="opacity:.6;">Nedostupná</span>
+					{/if}
+				{/if}
+			</div>
+
+			{if $user->isLoggedIn() && $user->isInRole('admin')}
+				<div class="book-cta" style="margin-top:10px;">
+					<a class="btn btn-soft" n:href="edit id => $b->id">Edit</a>
+					<a class="btn btn-accent" n:href="delete! id => $b->id" onclick="return confirm('Smazat?');">Smazat</a>
+				</div>
+			{/if}
+
+		</div>
+	{/foreach}
+</div>
+
+{/block}

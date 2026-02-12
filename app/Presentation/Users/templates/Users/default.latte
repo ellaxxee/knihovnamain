@@ -1,0 +1,38 @@
+<h1>User list</h1>
+
+
+
+<a n:href="Users:default">User list</a>
+
+<p><a n:href="Users:add">Add a new user</a></p>
+<p><a n:href="Book:default">List of books</a></p>
+
+
+
+<table background-color="white" border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Created at</th>
+        <th>Action</th>
+    </tr>
+    {foreach $users as $u}
+        <tr>
+            <td>{$u->id}</td>
+            <td>{$u->username}</td>
+            <td>{$u->first_name}</td>
+            <td>{$u->last_name}</td>
+            <td>{$u->email}</td>
+            <td>{$u->role}</td>
+            <td>{$u->created_at}</td>
+            <td>
+                <a n:href="Users:edit $u->id">EDIT</a>
+                <a n:href="delete! $u->id" onclick="return confirm('Do you really want to delte this?')">DELETE</a>
+            </td>
+        </tr>
+    {/foreach}
+</table>

@@ -1,0 +1,24 @@
+{block content}
+
+<h1>Výpůjčky (admin)</h1>
+
+<table class="table">
+	<tr>
+		<th>Kniha</th>
+		<th>Uživatel</th>
+		<th>Půjčeno</th>
+		<th>Do</th>
+	</tr>
+
+	{foreach $loans as $l}
+		<tr>
+			<td><a n:href="Book:detail id => $l->book_id">{$l->book_title}</a></td>
+			<td>{$l->first_name} {$l->last_name}<br><span style="color:var(--muted);font-size:12px;">{$l->email}</span></td>
+			<td>{$l->loaned_at|date:'j.n.Y'}</td>
+			<td>{$l->due_at|date:'j.n.Y'}</td>
+			
+		</tr>
+	{/foreach}
+</table>
+
+{/block}

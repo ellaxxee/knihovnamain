@@ -1,0 +1,49 @@
+{block content}
+
+<h1>Moje výpůjčky</h1>
+
+{if count($loans) === 0}
+	<div class="flash">Nemáš žádné výpůjčky.</div>
+{else}
+	<div class="books-grid">
+		{foreach $loans as $l}
+			<div class="book-tile">
+				<a n:href="Book:detail id => $l->book_id">
+					<div class="book-cover">
+						{if $l->book_cover}
+							<img src="{$basePath}/{$l->book_cover}" alt="{$l->book_title}">
+						{/if}
+					</div>
+				</a>
+
+				<span class="tag">{if $l->returned_at}vráceno{else}vypůjčeno{/if}</span>
+
+				<div class="book-name">
+					<a n:href="Book:detail id => $l->book_id">{$l->book_title}</a>
+				</div>
+
+				<div class="book-author">{$l->book_author}</div>
+
+				<div style="font-size:12px;color:var(--muted); margin: 6px 0 10px; line-height:1.4;">
+					Půjčeno: {$l->loaned_at|date:'j.n.Y'}<br>
+					Vrátit do: {$l->due_at|date:'j.n.Y'}
+					{if $l->returned_at}
+						<br>Vráceno: {$l->returned_at|date:'j.n.Y'}
+					{/if}
+				</div>
+
+				<div class="book-cta">
+					<a class="btn btn-soft" n:href="Book:detail id => $l->book_id">Detail</a>
+
+					{if !$l->returned_at}
+						<a class="btn btn-accent" n:href="return! id => $l->id" onclick="return confirm('Vrátit?');">Vrátit</a>
+					{else}
+						<span class="btn" style="opacity:.6;">Vráceno</span>
+					{/if}
+				</div>
+			</div>
+		{/foreach}
+	</div>
+{/if}
+
+{/block}

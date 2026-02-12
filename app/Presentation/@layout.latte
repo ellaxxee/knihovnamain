@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="cs">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{ifset title}{include title|stripHtml} | {/ifset}KNIHOVNA</title>
+
+	<style>
+	:root{
+		--c1:#3b503d; --c2:#4a746e; --c3:#f1edb3; --c4:#c8cf94;
+		--bg:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e5e7eb; --soft:#f8fafc;
+		--r:16px; --r2:12px;
+		--shadow: 0 6px 16px rgba(15,23,42,.06);
+	}
+	*{ box-sizing:border-box; }
+	html,body{ height:100%; }
+	body{
+		margin:0;
+		font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+		background: var(--bg);
+		color: var(--text);
+		overflow-x:hidden;
+	}
+	a{ color:inherit; text-decoration:none; }
+	a:hover{ text-decoration:none; }
+
+	
+	header{
+		position: sticky;
+		top:0;
+		z-index:100;
+		background:#fff;
+		border-bottom:1px solid var(--line);
+	}
+	.topbar{
+		max-width:1200px;
+		margin:0 auto;
+		padding:12px 16px;
+		display:flex;
+		align-items:center;
+		gap:14px;
+		flex-wrap:wrap;
+	}
+	.brand{ display:flex; align-items:center; gap:10px; }
+	.logo{
+		width:34px; height:34px;
+		border-radius:12px;
+		background: var(--c4);
+		display:grid; place-items:center;
+		box-shadow: var(--shadow);
+	}
+	.brand strong{ font-size:15px; letter-spacing:.2px; }
+	.brand small{ display:block; font-size:12px; color: var(--muted); font-weight:700; margin-top:1px; }
+
+	nav{
+		display:flex;
+		align-items:center;
+		gap:8px;
+		flex-wrap:wrap;
+	}
+	nav a{
+		padding:10px 10px;
+		border-radius:12px;
+		font-weight:900;
+		font-size:13px;
+	}
+	nav a:hover{ background: var(--c3); }
+
+	.search{
+		flex:1;
+		min-width:240px;
+		display:flex;
+		align-items:center;
+		gap:10px;
+		padding:10px 14px;
+		border-radius:999px;
+		border:1px solid var(--line);
+		background: var(--soft);
+	}
+	.search input{ width:100%; border:0; outline:0; background:transparent; font-size:14px; }
+
+	.actions{
+		display:flex;
+		align-items:center;
+		gap:10px;
+		margin-left:auto;
+		flex-wrap:wrap;
+	}
+	.chip{
+		display:inline-flex;
+		align-items:center;
+		gap:8px;
+		padding:10px 12px;
+		border-radius:12px;
+		border:1px solid rgba(59,80,61,.25);
+		background: rgba(200,207,148,.25);
+		font-weight:900;
+		font-size:13px;
+		color: var(--c1);
+		white-space:nowrap;
+	}
+	.chip span{
+		color:#1f2937;
+		max-width:160px;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		display:inline-block;
+	}
+	.btn{
+		display:inline-flex;
+		align-items:center;
+		justify-content:center;
+		padding:10px 12px;
+		border-radius:12px;
+		border:1px solid var(--line);
+		background:#fff;
+		font-weight:900;
+		font-size:13px;
+		white-space:nowrap;
+	}
+	.btn:hover{ background: var(--soft); }
+	.btn-accent{ background: var(--c1); color:#fff; border-color:transparent; }
+	.btn-accent:hover{ background:#2f4131; }
+	.btn-soft{ background: var(--c3); border-color:transparent; }
+
+	main{
+		max-width:1200px;
+		margin:0 auto;
+		padding:18px 16px 40px;
+	}
+	.flash{
+		margin:10px 0 14px;
+		padding:12px 14px;
+		border-radius: var(--r2);
+		background:#fff;
+		border:1px solid var(--line);
+		box-shadow: var(--shadow);
+	}
+
+	.books-grid{
+		display:grid;
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+		gap:18px;
+		align-items:start;
+	}
+	.book-tile{
+		background:#fff;
+		border:1px solid var(--line);
+		border-radius: var(--r);
+		padding:10px;
+		box-shadow: var(--shadow);
+	}
+	.book-cover{
+		width:100%;
+		aspect-ratio: 2 / 3;
+		border-radius: 12px;
+		background:#f3f4f6;
+		overflow:hidden;
+		display:block;
+	}
+	.book-cover img{ width:100%; height:100%; object-fit:cover; display:block; }
+	.tag{
+		display:inline-flex;
+		margin-top:8px;
+		padding:4px 8px;
+		border-radius:999px;
+		background:#111827;
+		color:#fff;
+		font-size:12px;
+		font-weight:900;
+	}
+	.book-name{ margin:10px 0 2px; font-weight:900; font-size:14px; }
+	.book-author{ margin:0 0 10px; color: var(--muted); font-size:13px; }
+	.book-cta{ display:flex; gap:8px; flex-wrap:wrap; }
+
+	.authWrap{
+		min-height: calc(100vh - 90px);
+		display:flex;
+		align-items:center;
+		justify-content:center;
+		padding: 24px 16px;
+	}
+	.authCard{
+		width:100%;
+		max-width:420px;
+		background:#fff;
+		border:1px solid var(--line);
+		border-radius: var(--r);
+		box-shadow: var(--shadow);
+		padding:18px;
+	}
+	.authHeader h1{ margin:0 0 6px; font-size:28px; letter-spacing:-.4px; }
+	.authHeader p{ margin:0 0 14px; color: var(--muted); font-size:14px; }
+
+	.authForm{ display:flex; flex-direction:column; gap:12px; }
+	.field label{ font-weight:900; font-size:13px; margin-bottom:6px; display:block; }
+	.input{
+		width:100%;
+		padding:11px 12px;
+		border-radius:12px;
+		border:1px solid var(--line);
+		font-size:14px;
+		background:#fff;
+	}
+	.input:focus{
+		outline:none;
+		border-color: rgba(59,80,61,.35);
+		box-shadow: 0 0 0 3px rgba(200,207,148,.35);
+	}
+
+	.table{
+		width:100%;
+		border-collapse: collapse;
+		background:#fff;
+		border:1px solid var(--line);
+		border-radius: var(--r);
+		overflow:hidden;
+		box-shadow: var(--shadow);
+	}
+	.table th, .table td{
+		text-align:left;
+		padding:12px 10px;
+		border-bottom:1px solid var(--line);
+		vertical-align:top;
+		font-size:14px;
+	}
+	.table th{
+		font-size:12px;
+		letter-spacing:.25px;
+		color: var(--muted);
+		text-transform: uppercase;
+	}
+
+	/* ===== DETAIL ===== */
+	.backLink{
+		display:inline-flex;
+		align-items:center;
+		gap:8px;
+		padding:10px 12px;
+		border-radius:12px;
+		border:2px solid var(--c1);
+		color: var(--c1);
+		font-weight:900;
+		font-size:13px;
+		background:#fff;
+	}
+	.backLink:hover{ background: rgba(200,207,148,.25); }
+
+	.detailGrid{
+		display:grid;
+		grid-template-columns: 340px 1fr;
+		gap: 26px;
+		align-items:start;
+		margin-top:12px;
+	}
+	.detailCover{
+		width:100%;
+		border-radius: var(--r);
+		overflow:hidden;
+		border:1px solid var(--line);
+		background:#f3f4f6;
+		box-shadow: var(--shadow);
+	}
+	.detailCover img{ width:100%; height:auto; display:block; object-fit:cover; }
+
+	.detailTitle{ margin:0; font-size:38px; letter-spacing:-.6px; line-height:1.1; }
+	.detailAuthor{ margin:8px 0 16px; color: var(--muted); font-size:16px; font-weight:800; }
+
+	.detailDesc, .detailBottom{
+		background:#fff;
+		border:1px solid var(--line);
+		border-radius: var(--r);
+		box-shadow: var(--shadow);
+		padding:16px;
+	}
+	.detailDesc{ color:#334155; line-height:1.6; font-size:15px; margin-bottom:16px; }
+
+	.metaGrid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px 16px; }
+	.metaItem strong{ display:block; font-size:12px; color: var(--muted); text-transform:uppercase; letter-spacing:.3px; margin-bottom:2px; }
+	.availLine{ display:flex; justify-content:space-between; gap:10px; margin:12px 0; padding-top:10px; border-top:1px solid var(--line); font-weight:900; }
+	.availBadge{
+		padding:6px 10px;
+		border-radius:999px;
+		background: rgba(200,207,148,.25);
+		color: var(--c1);
+		border:1px solid rgba(59,80,61,.25);
+		font-size:13px;
+	}
+	.borrowBtn{
+		width:100%;
+		padding:12px 14px;
+		border-radius:12px;
+		background: var(--c1);
+		color:#fff;
+		font-weight:900;
+		font-size:14px;
+		border:0;
+		display:inline-flex;
+		align-items:center;
+		justify-content:center;
+	}
+	.borrowBtn:hover{ background:#2f4131; }
+
+.formCard{
+	background:#fff;
+	border:1px solid var(--line);
+	border-radius: var(--r);
+	box-shadow: var(--shadow);
+	padding:16px;
+	max-width: 720px;
+}
+
+/* když Nette vykreslí form jako tabulku */
+.formCard table{ width:100%; border-collapse: separate; border-spacing: 0 10px; }
+.formCard th{ text-align:left; font-size:13px; font-weight:900; padding-right:12px; white-space:nowrap; }
+.formCard td{ width:100%; }
+
+.formCard input[type="text"],
+.formCard input[type="number"],
+.formCard input[type="email"],
+.formCard input[type="password"],
+.formCard textarea,
+.formCard select{
+	width:100%;
+	padding:11px 12px;
+	border-radius:12px;
+	border:1px solid var(--line);
+	font-size:14px;
+	background:#fff;
+}
+
+.formCard input[type="file"]{
+	width:100%;
+}
+
+.formCard input[type="submit"],
+.formCard button[type="submit"]{
+	padding:11px 12px;
+	border-radius:12px;
+	border:0;
+	background: var(--c1);
+	color:#fff;
+	font-weight:900;
+	font-size:14px;
+	cursor:pointer;
+}
+.formCard input[type="submit"]:hover,
+.formCard button[type="submit"]:hover{
+	background:#2f4131;
+}
+
+	@media (max-width: 900px){
+		.search{ min-width:100%; }
+		.actions{ margin-left:0; }
+		.detailGrid{ grid-template-columns: 1fr; }
+	}
+	</style>
+</head>
+
+<body>
+
+<header>
+	<div class="topbar">
+		<a class="brand" n:href="Book:default">
+			<div class="logo"><strong>K.</strong></div>
+			<div>
+			
+				<small>studentská knihovna studentům</small>
+			</div>
+		</a>
+
+		<nav aria-label="Navigace">
+			<a n:href="Book:default">Knihy</a>
+			{if $user->isLoggedIn()}
+				<a n:href="Loan:default">Moje výpůjčky</a>
+			{/if}
+			{if $user->isLoggedIn() && $user->isInRole('admin')}
+				<a n:href="Book:add">Přidat knihu</a>
+				<a n:href="AdminLoan:default">Výpůjčky</a>
+			{/if}
+		</nav>
+
+	
+		<div class="actions">
+			{if $user->isLoggedIn()}
+				<div class="chip">Přihlášený jako: <span>{$user->identity->first_name} {$user->identity->last_name}</span></div>
+				<a class="btn btn-accent" n:href="Sign:out">Odhlásit</a>
+			{else}
+				<a class="btn btn-accent" n:href="Sign:in">Přihlásit</a>
+				<a class="btn" n:href="Sign:up">Registrovat</a>
+			{/if}
+		</div>
+	</div>
+</header>
+
+<main>
+	{foreach $flashes as $flash}
+		<div class="flash">{$flash->message}</div>
+	{/foreach}
+
+	{include content}
+</main>
+
+</body>
+</html>

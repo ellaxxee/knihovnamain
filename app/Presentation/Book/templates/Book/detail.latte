@@ -1,0 +1,71 @@
+{block content}
+
+<a class="backLink" n:href="Book:default">← Zpět na seznam</a>
+
+<div class="detailGrid">
+	<div>
+		<div class="detailCover">
+			{if $book->cover}
+				<img src="{$basePath}/{$book->cover}" alt="{$book->title}">
+			{/if}
+		</div>
+	</div>
+
+	<div>
+		<h1 class="detailTitle">{$book->title}</h1>
+		<div class="detailAuthor">{$book->author}</div>
+
+		<div class="detailDesc">
+			{if $book->description}
+				{$book->description}
+			{else}
+				<em style="color:var(--muted);">Popis není vyplněný.</em>
+			{/if}
+		</div>
+
+		<div class="detailBottom">
+			<div class="metaGrid">
+				<div class="metaItem">
+					<strong>Rok vydání</strong>
+					{$book->publication_year}
+				</div>
+
+				<div class="metaItem">
+					<strong>Žánr</strong>
+					{$book->genre}
+				</div>
+
+				<div class="metaItem" style="grid-column:1 / -1;">
+					<strong>ISBN</strong>
+					{$book->isbn}
+				</div>
+			</div>
+
+			<div class="availLine">
+				<span>Dostupnost</span>
+				<span class="availBadge">Volné: {$available}</span>
+			</div>
+
+			{if $user->isLoggedIn() && !$user->isInRole('admin')}
+				{if $available > 0}
+					<a class="borrowBtn" n:href="borrow! id => $book->id">Vypůjčit</a>
+				{else}
+					<div class="borrowDisabled">Nedostupná</div>
+				{/if}
+			{else}
+				<div class="borrowDisabled">
+					{if !$user->isLoggedIn()}Přihlas se pro výpůjčku{/if}
+				</div>
+			{/if}
+
+			{if $user->isLoggedIn() && $user->isInRole('admin')}
+				<div class="book-cta" style="margin-top:10px;">
+					<a class="btn btn-soft" n:href="edit id => $book->id">Edit</a>
+					<a class="btn btn-accent" n:href="delete! id => $book->id" onclick="return confirm('Smazat?');">Smazat</a>
+				</div>
+			{/if}
+		</div>
+	</div>
+</div>
+
+{/block}

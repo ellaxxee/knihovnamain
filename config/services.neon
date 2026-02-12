@@ -1,0 +1,17 @@
+services:
+    router:
+        create: App\Core\RouterFactory::createRouter
+
+    authenticator:
+        create: App\Model\DbAuthenticator
+
+    userService:
+        create: App\Model\UserService
+
+    loanService:
+        create: App\Model\LoanService
+
+    bookPresenter:
+        create: App\Presentation\Book\BookPresenter
+        arguments:
+            wwwDir: %wwwDir%

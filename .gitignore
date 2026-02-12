@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Nette
+/temp/
+/log/
+
+# Composer
+/vendor/
+
+# Node / build
+/node_modules/
+/www/dist/
+/www/build/
+
+# IDE
+/.idea/
+/.vscode/
+
+# Local config (pokud existuje)
+config/local.neon
