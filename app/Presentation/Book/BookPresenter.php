@@ -17,7 +17,7 @@ final class BookPresenter extends BasePresenter
 		private LoanService $loanService,
 	) {
 		parent::__construct();
-	}
+	} 
 
 	public function renderDefault(): void
 	{
@@ -37,13 +37,6 @@ final class BookPresenter extends BasePresenter
 
 		$this->template->book = $book;
 		$this->template->available = $this->loanService->available($id);
-	}
-
-	public function actionAdd(): void
-	{
-		if (!$this->getUser()->isInRole('admin')) {
-			$this->error('Forbidden', IResponse::S403_FORBIDDEN);
-		}
 	}
 
 	public function actionEdit(int $id): void
@@ -73,7 +66,7 @@ final class BookPresenter extends BasePresenter
 		$form->onSuccess[] = [$this, 'bookFormSucceeded'];
 		return $form;
 	}
-
+		//stdClass po validaci bookFormSucceeded přiřadit db hodnoty z Form
 	public function bookFormSucceeded(Form $form, \stdClass $v): void
 	{
 
@@ -124,8 +117,8 @@ final class BookPresenter extends BasePresenter
 
 	public function handleDelete(int $id): void
 	{
-		if (!$this->getUser()->isInRole('admin')) 
-		$this->db->table('books')->get($id)?->delete();
-		$this->redirect('Book:default');
+		if ($this->getUser()->isInRole('admin')) {
+    $this->db->table('books')->get($id)?->delete();
+}
 	}
 }

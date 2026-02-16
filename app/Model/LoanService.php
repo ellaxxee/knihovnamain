@@ -41,7 +41,7 @@ final class LoanService
 			throw new \RuntimeException('Max 3 výpůjčky.');
 		}
 
-		
+
 
 		$now = new \DateTimeImmutable();
 
@@ -57,9 +57,9 @@ final class LoanService
 	public function returnLoan(int $loanId): void
 	{
 		
-
 		$loan = $this->db->table('loans')->get($loanId);
 	
 		$loan->update(['returned_at' => new \DateTimeImmutable()]);
 	}
 }
+

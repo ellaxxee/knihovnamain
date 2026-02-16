@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use Nette\Database\Explorer;
+use Nette\Database\Explorer; 
 use Nette\Security\Authenticator;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IIdentity;
